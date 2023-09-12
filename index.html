@@ -1,0 +1,293 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+    <script defer src=https://cdn.JsDelivr.net/npm/p5/lib/addons/p5.sound.min.js></script>
+    <script src="characters.js"></script>
+    <script src="haunted_mansion.js"></script>
+    <style>
+        #mainMain{
+            position:fixed;
+            height: 100vh;
+            width: 100vw;
+            border: 0px;
+            padding: 0px;
+            z-index: -1;
+        }
+
+        #backgroundHolder{
+            position:fixed;
+            z-index: -1;
+        }
+        
+        #title{
+            text-align: center; 
+        }
+        
+        #main{
+            width: 1100px;
+            height: 800px;
+            padding-top: 10vh;
+            padding-bottom: 10vh;
+            /*background-color: gray;*/
+            display: grid;
+            margin: auto;
+            grid-template-rows: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        #mapDiv{
+            height: 500px;
+            width: 800px;
+            grid-row-start: 2;
+            grid-column-start: 2;
+            background-color: black;
+        }
+        
+        #pauseDiv{
+            height: 500px;
+            width: 150px;
+            grid-row-start: 2;
+            grid-column-start:3;
+        }
+        
+        #playDiv{
+            height: 500px;
+            width: 150px;
+            grid-row-start: 2;
+            grid-column-start:1;
+        }
+        
+        /* the other corner divs that will hold the external canvi */
+        #topLeft{
+            overflow: hidden;
+            grid-row-start: 1;
+            grid-column-start: 1;
+        }
+        
+        #scoreDiv{
+            display: flex;
+            overFlow: hidden;
+            justify-content: center; 
+            align-items: center;
+            grid-row-start: 3;
+            grid-column-start: 2;
+        }
+        
+        #topRight{
+            overflow: hidden;
+            grid-row-start: 1;
+            grid-column-start: 3;
+        }
+        
+        #bottomLeft{
+            overflow: hidden;
+            box-size: border-box;
+            grid-row-start: 3;
+            grid-column-start: 1;
+        }
+        
+        #ammoDiv{
+            display: flex;
+            overFlow: hidden;
+            justify-content: center; 
+            align-items: center;
+            grid-row-start: 1;
+            grid-column-start: 2;
+        }
+        
+        
+        #bottomRight{
+            overflow: hidden;
+            box-size: border-box;
+            grid-row-start: 3;
+            grid-column-start: 3;
+            
+        }
+        
+        #startMenu{
+            height: 500px;
+            width: 800px;
+            grid-row-start: 2;
+            grid-column-start: 2;
+            overflow: hidden;
+            /*background-color: rgb(136,53,26);*/
+            visibility: hidden;
+            opacity: 90%;
+            color: white;
+        }
+        
+        .startMenuContent{
+            display: flex;
+            justify-content: center;
+            align-items: center;    
+        }
+        
+        #pauseMenu{
+            height: 500px;
+            width: 800px;
+            grid-row-start: 2;
+            grid-column-start: 2;
+            overflow: hidden;
+            background-color: gray;
+            visibility: hidden;
+            opacity: 75%;
+        }
+        
+        #highscoreDiv{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction:column;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        #documentation{
+            width: 90vw;
+            padding: 10vh;
+            overflow: hidden;
+            background-color: gray;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .post{
+            width = 40vw;
+        }
+        .postImage{
+            width: 50vw;
+            padding-top: 1vh;
+        }
+        
+    </style>
+  </head>
+  <body>
+      <div id = "mainMain">
+      <!--<div id = "title">
+        <h1>Haunted Mansion</h1>
+      </div>-->
+          <div id = "backgroundHolder"></div>
+      </div>
+          <div id = "main">
+              <div id = "topLeft"></div>
+              <div id = "ammoDiv">
+                <h1 id = "ammoPrint"></h1>
+              </div>
+              <div id = "topRight"></div>
+              <div id = "playDiv"></div>
+              <div id = "mapDiv"></div>
+              <div id = "startMenu">
+                    <div class = "startMenuContent">
+                        <h1 id = "specialMessage">Haunted Mansion</h1>
+                    </div>
+                    <div class = "startMenuContent">
+                        <h3 id = "startMenuScore"></h3>
+                    </div>
+                    <div class = "startMenuContent">
+                        <h3 id = "startMenuHighScore"></h3>
+                    </div>
+                    <div class = "startMenuContent">
+                        <h3>Rules:</h2>
+                        <ul>
+                            <li>Move with WASD</li>
+                            <li>Aim and shoot with the mouse</li>
+                            <li>Collect the coins</li>
+                            <li>Shoot the zombies</li>
+                            <li>Freeze when the ghosts touch you</li>
+                            <li>Don't piss off the statues</li>
+                        </ul>
+                    </div>
+                    <div class = "startMenuContent">
+                        <h3>Difficulty:</h2>
+                        <input type="range" min="1" max="3" value="2" id="difficultyRange">
+                    </div>
+                    <div class = "startMenuContent">
+                        <button id = "startButton" onClick = startGame()>Start</button>
+                    </div>
+                </div>
+              <div id = "pauseMenu">
+                  <!--
+                  <div class = "startMenuContent">
+                      <h1>Pause</h1>
+                  </div>
+                    -->
+                  <div id = "highscoreDiv" class = "startMenuContent">
+                      <h1 id = "highscorePrint"></h1>
+                      <h1 id = "pauseScreenScoreDisplay"></h1>
+                      <h1 id = "pauseScreenAmmoDisplay"></h1>
+                  </div>
+              </div>
+              <div id = "pauseDiv"></div>
+              <div id = "bottomLeft"></div>
+              <div id = "scoreDiv">
+                <h1 id = "scorePrint"></h1>
+              </div>
+              <div id = "bottomRight"></div>
+        </div>
+    <div id = "documentation">
+        <h1>Documentation</h1>
+        <div class = "post">
+            <h2>Concept</h2>
+            <img class = "postImage" src = "Documentation/concept.png"></img>
+            <p>The basic idea of this game was to have a character running around a haunted mansion, trying to find the treasure inside of it, and fighting off the various things that would haunt such a place. I wanted there to be not only ghosts and zombies that would be dealt with in different ways, but also statues that would be outside of the map itself and follow the player around with their eyes. This part was greatly inspired by the illusion of the busts inside Disneyland's Haunted Mansion ride where their eyes seem to follow you no matter where you are in the room. In this game these statues' eyes would turn red every now and again before shooting beams at where the player was when their eyes started to turn.</p>
+            <p>
+            I thought this as a mechanic would combine well with the way the ghosts kill the player, so while the player might be standing perfectly still to avoid a ghost from killing them, they would be vulnerable to the statues and vice versa.
+            </p>
+        </div>
+        <div class = "post">
+            <h2>1) Div layout</h2>
+            <img class = "postImage" src = "Documentation/01%20Div%20Layout.png"></img>
+            <p>First I layed out the outline of the game board.</p>
+        </div>
+        <div class = "post">
+            <h2>2) Statue Tracking</h2>
+            <img class = "postImage" src = "Documentation/02%20Statue%20Tracking.png"></img>
+            <p>Then got the secondari canvii (those on the corners of the map canvas), to track the position of something on the screen. At first it was the mouse</p>
+      </div>
+        <div class = "post">
+            <h2>3) Player Movement and Shooting</h2>
+            <img class = "postImage" src = "Documentation/03%20Player%20Movement%20and%20Shooting.png"></img>
+            <p>Created the player character, got it to move around the map and track shots where shoot wherever was clicked.
+            These lines you see here are what became bullets. 
+            </p>
+        </div>
+        <div class = "post">
+            <h2>4) Shooting, Ammo, Coins, Scoring, and Zombies</h2>
+            <img class = "postImage" src = "Documentation/04%20shooting,%20zombes,%20coins%20ammo,%20score.png"></img>
+            <p>At this point I added bullets that were tracked throughout the loop (so they didn't just stop wherever was clicked) and created something for them to shoot at-the zombie monster. Along with an ammunition tracker and randomly spawning ammo drops that the player could pick up to replenish their ammo. The other dropped item, coins, the collection of which determin the score, was also put into effect here. 
+            </p>
+        </div>
+        <div class = "post">
+            <h2>05) Collisions, Ghosts, Statue Kills</h2>
+            <img class = "postImage" src = "Documentation/05%20Collisions%20ghosts,%20statue%20kills%20.png"></img>
+            <p>
+            Added collision tracking between the player, zombies, the bullets that kill them, and ghosts, the new monster. This monster does not kill on contact like the zombies do. They will kill the player if the player moves at all while the ghost is touching them. This includes the mouse, seeing as that's what the player uses to aim. The final enemy, the statues that inhabit the outer canvii were added here, at least as far as they shot lasers at the player every so often.
+            </p>
+        </div>
+        <div class = "post">
+            <h2>06) Start Menu, Difficulty</h2>
+            <img class = "postImage" src = "Documentation/06%20Start%20Menu,%20difficulty.png"></img>
+            <p>
+            With most of the actual game elements put together, at this point we started focusing more on the design of the game and the UI with which players would interact with it. This included a start menu that appears when the game begins where the rules are explained and the player can set their difficult with a slider. This difficulty increases the likelihood of all the different monster related events (zombies and ghost spawns and then the beam being shot from the statues' eyes) while also decreasing the likelihood of ammunition refills spawning.
+            </p>
+        </div>
+        <div class = "post">
+            <h2>07) Pause Menu, Play Button, and Highscore Permanance</h2>
+            <img class = "postImage" src = "Documentation/07%20Pause%20Menu,%20play%20button,%20highscore%20permanance.png"></img>
+            <p>
+            After the start menu, I created a pause button, pause menu, and a play button that would appear to get the player out of the pause menu. Also created a highscore that would be remembered by the users computer in between uses. 
+            </p>
+        </div>
+        <div class = "post">
+            <h2>08) Assets</h2>
+            <img class = "postImage" src = "Documentation/08%20Assets.png"></img>
+            <p>
+            Now, after all the elements of the game were done, I could finally create the assets to be assign to the character, ghost, zombie, statue, and map. Note that the statues' are actually a seperate drawing from the statue itself because they have to move around and follow the player where that character is on the map. 
+            </p>
+        </div>
+    </div>
+    </div>
+  </body>
+</html>
