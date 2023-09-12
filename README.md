@@ -10,14 +10,14 @@ How to play:
   Move over ammunition to collect more (you start with 6).
 
 Enemies:
-  1) Zombies
+  1) Zombies. 
       These are the most straightforward enemy. They spawn on the edges of the map and move towards you, if one touches you, you die. You can kill them by shooting them.
 
-  2) Ghosts
+  2) Ghosts.
        These are more complicated. They spawn on the edge of the map and move towards you. You cannot shoot them. The only way to stop them is to stand completely still they pass through you. That includes aiming your gun or shooting.
        If you move while they are touching you, they kill you.
 
-  3) Statues
+  3) Statues.
        These busts are off of the map and thus cannot be killed or shot at. Their eyes track you. At a random time they will decided to shoot. They lock on to wear you. You have a tiny bit of time to move out of the way before you are caught in their beam.
        If you are within the radius of destruction from their beam you die.
 
@@ -34,4 +34,3 @@ Difficulty:
 Images documenting the creation process can be found under the "documentation" folder. 
 
 Have fun!
--Ryan
